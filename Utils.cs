@@ -22,12 +22,12 @@ namespace Ivvy.Subscriptions
             for (int retries = 1; retries <= numRetries; retries++) {
                 try {
                     HttpWebRequest req = HttpWebRequest.Create(url) as HttpWebRequest;
-                    using (var res = await req.GetResponseAsync() as HttpWebResponse) {
-                        using (var reader = new StreamReader(res.GetResponseStream())) {
-                            var response = await reader.ReadToEndAsync();
-                            return response.Trim();
-                        }
-                    }
+                    var res = await req.GetResponseAsync() as HttpWebResponse;
+                    var reader = new StreamReader(res.GetResponseStream());
+                    var response = await reader.ReadToEndAsync();
+                    reader.Close();
+                    res.Close();
+                    return response.Trim();
                 }
                 catch (Exception ex) {
                     if (retries == numRetries) {
@@ -37,14 +37,6 @@ namespace Ivvy.Subscriptions
                 }
             }
             throw new Exception($"Failed to make GET request to {url}");
-        }
-
-        public static RSAParameters ToRSAParameters(RsaKeyParameters rsaKey)
-        {
-            RSAParameters rp = new RSAParameters();
-            rp.Modulus = rsaKey.Modulus.ToByteArrayUnsigned();
-            rp.Exponent = rsaKey.Exponent.ToByteArrayUnsigned();
-            return rp;
         }
     }
 }

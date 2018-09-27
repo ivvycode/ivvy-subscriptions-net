@@ -87,12 +87,12 @@ namespace Ivvy.Subscriptions
                 await receivedPublicKey(SignatureCertPath, publicKey);
             }
             var pemObject = new PemReader(new StringReader(publicKey)).ReadObject() as RsaKeyParameters;
-            var parameters = Utils.ToRSAParameters(pemObject);
+            var parameters = DotNetUtilities.ToRSAParameters(pemObject);
             RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
             rsa.ImportParameters(parameters);
             return rsa.VerifyData(
                 Encoding.UTF8.GetBytes(strToSign),
-                HashAlgorithmName.SHA1,
+                CryptoConfig.MapNameToOID("SHA1"),
                 Convert.FromBase64String(Signature)
             );
         }
