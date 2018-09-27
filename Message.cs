@@ -20,6 +20,12 @@ namespace Ivvy.Subscriptions
     public class Message
     {
         /// <summary>
+        /// The unique transaction id of the message.
+        /// </summary>
+        [JsonProperty("TxnId")]
+        public string TxnId { get; set; }
+
+        /// <summary>
         /// The application region from which the message was sent.
         /// </summary>
         [JsonProperty("Region")]
@@ -58,8 +64,8 @@ namespace Ivvy.Subscriptions
         /// <summary>
         /// The path to the public key that can be used to verify the signature.
         /// </summary>
-        [JsonProperty("SigningCertPath")]
-        public string SignatureCertPath { get; set; }
+        [JsonProperty("SigningPublicKeyPath")]
+        public string SigningPublicKeyPath { get; set; }
 
         /// <summary>
         /// Parses a json string, and returns a message object.
@@ -84,7 +90,7 @@ namespace Ivvy.Subscriptions
                 return false;
             }
             if (receivedPublicKey != null) {
-                await receivedPublicKey(SignatureCertPath, publicKey);
+                await receivedPublicKey(SigningPublicKeyPath, publicKey);
             }
             var pemObject = new PemReader(new StringReader(publicKey)).ReadObject() as RsaKeyParameters;
             var parameters = DotNetUtilities.ToRSAParameters(pemObject);
@@ -108,6 +114,7 @@ namespace Ivvy.Subscriptions
                 bodyHash = Ivvy.Utils.BytesToString(hashBytes);
             }
             string[] parts = {
+                TxnId == null ? "" : TxnId,
                 Region == null ? "" : Region,
                 Timestamp.ToString(),
                 AccountId == null ? "" : AccountId,
@@ -123,11 +130,11 @@ namespace Ivvy.Subscriptions
         /// </summary>
         private async Task<string> FetchPublicKey(Dictionary<string, string> publicKeyCache)
         {
-            if (SignatureCertPath == null) {
+            if (SigningPublicKeyPath == null) {
                 return null;
             }
-            if (publicKeyCache != null && publicKeyCache.ContainsKey(SignatureCertPath)) {
-                return publicKeyCache[SignatureCertPath];
+            if (publicKeyCache != null && publicKeyCache.ContainsKey(SigningPublicKeyPath)) {
+                return publicKeyCache[SigningPublicKeyPath];
             }
             string publicKeyUrl = GetPublicKeyUrl();
             if (publicKeyUrl == null) {
@@ -146,7 +153,7 @@ namespace Ivvy.Subscriptions
         /// </summary>
         private string GetPublicKeyUrl()
         {
-            if (SignatureCertPath == null || Region == null) {
+            if (SigningPublicKeyPath == null || Region == null) {
                 return null;
             }
             string basePath = "";
@@ -156,7 +163,7 @@ namespace Ivvy.Subscriptions
             else {
                 basePath = $"https://s3-{Region}.amazonaws.com/accountnotifications.{Region}.ivvy.com";
             }
-            return basePath + SignatureCertPath;
+            return basePath + SigningPublicKeyPath;
         }
     }
 }
