@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+
+  <PropertyGroup>
+    <Authors>Ivvy</Authors>
+    <OutputType>Library</OutputType>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <Description>Ivvy.Subscriptions makes it easy to consume subscription notification messages from the iVvy platform.</Description>
+    <AssemblyTitle>Ivvy.Subscriptions</AssemblyTitle>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <AssemblyName>Ivvy.Subscriptions</AssemblyName>
+    <PackageId>Ivvy.Subscriptions</PackageId>
+    <PackageTags>Ivvy;API;Subscriptions;Notifications</PackageTags>
+    <Company>Ivvy Pty Ltd</Company>
+    <Product>Ivvy API</Product>
+    <Copyright>Copyright (c) Ivvy Pty Ltd</Copyright>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.1.11" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
+    <PackageReference Include="Ivvy.API" Version="0.6.1" />
+    <PackageReference Include="Portable.BouncyCastle" Version="1.8.3" />
+  </ItemGroup>
+
+</Project>
