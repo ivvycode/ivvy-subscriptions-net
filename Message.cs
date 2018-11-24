@@ -10,6 +10,7 @@ using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
+using Ivvy.Subscriptions.Messages.Venues.Bookings;
 
 namespace Ivvy.Subscriptions
 {
@@ -73,6 +74,43 @@ namespace Ivvy.Subscriptions
         public static Message ParseMessage(string messageText)
         {
             return JsonConvert.DeserializeObject<Message>(messageText);
+        }
+
+        /// <summary>
+        /// Decodes the message body into a known iVvy message.
+        /// </summary>
+        public object DecodeBody()
+        {
+            if (Subject == null || Subject == "" || Body == null || Body == "") {
+                return null;
+            }
+            switch (Subject) {
+                case "BookingAccommodationAdded":
+                    return TryDecodeBody<AccommodationAdded>(Body);
+
+                case "BookingAccommodationUpdated":
+                    return TryDecodeBody<AccommodationUpdated>(Body);
+
+                default:
+                    return null;
+            }
+        }
+
+        /// <summary>
+        /// Does the actual work of deserializing the message body.
+        /// </summary>
+        private object TryDecodeBody<T>(string json) where T : new()
+        {
+            try {
+                return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                    DateFormatString = Ivvy.Utils.DateTimeFormat,
+                    DateParseHandling = DateParseHandling.DateTime,
+                });
+            }
+            catch (Exception ex) {
+                return null;
+            }
         }
 
         /// <summary>
