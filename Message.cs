@@ -91,6 +91,9 @@ namespace Ivvy.Subscriptions
                 case "BookingAccommodationUpdated":
                     return TryDecodeBody<AccommodationUpdated>(Body);
 
+                case "BookingAccommodationDeleted":
+                    return TryDecodeBody<AccommodationDeleted>(Body);
+
                 default:
                     return null;
             }
