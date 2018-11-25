@@ -6,9 +6,9 @@ using System.Collections.Generic;
 namespace Ivvy.Subscriptions.Messages.Venues.Bookings
 {
     /// <summary>
-    /// An accommodation group on a booking was deleted
+    /// A room reservation on a booking was deleted
     /// </summary>
-    public class AccommodationDeleted
+    public class RoomReservationDeleted
     {
         /// <summary>
         /// The unique id of the venue to which the booking belongs.
@@ -17,21 +17,21 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         public int VenueId { get; set; }
 
         /// <summary>
-        /// The status of the booking when the accommodation group was deleted.
+        /// The status of the booking when the room reservation was deleted.
         /// </summary>
         [JsonProperty("bookingStatus")]
         public Booking.StatusOptions BookingStatus { get; set; }
 
         /// <summary>
-        /// The unique id of the booking to which the accommodation belonged.
+        /// The unique id of the booking to which the room reservation belonged.
         /// </summary>
         [JsonProperty("bookingId")]
         public int BookingId { get; set; }
 
         /// <summary>
-        /// The unique id of the accommodation group that was deleted.
+        /// The unique id of the room reservation that was deleted.
         /// </summary>
-        [JsonProperty("accommodationId")]
-        public int AccommodationId { get; set; }
+        [JsonProperty("reservationId")]
+        public int ReservationId { get; set; }
     }
 }
