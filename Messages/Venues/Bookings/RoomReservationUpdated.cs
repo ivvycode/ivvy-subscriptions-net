@@ -21,5 +21,17 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// </summary>
         [JsonProperty("data")]
         public RoomReservation RoomReservation { get; set; }
+
+        /// <summary>
+        /// Any previous information of the room reservation that was changed.
+        /// </summary>
+        [JsonProperty("previousData")]
+        public Dictionary<string, object> PreviousData { get; set; }
+
+        /// <summary>
+        /// Any new information that was added to the room reservation when changed.
+        /// </summary>
+        [JsonProperty("newestData")]
+        public Dictionary<string, object> NewestData { get; set; }
     }
 }
