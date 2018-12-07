@@ -85,6 +85,15 @@ namespace Ivvy.Subscriptions
                 return null;
             }
             switch (Subject) {
+                case "BookingAdded":
+                    return TryDecodeBody<BookingAdded>(Body);
+
+                case "BookingUpdated":
+                    return TryDecodeBody<BookingUpdated>(Body);
+
+                case "BookingDeleted":
+                    return TryDecodeBody<BookingDeleted>(Body);
+
                 case "BookingAccommodationAdded":
                     return TryDecodeBody<AccommodationAdded>(Body);
 
