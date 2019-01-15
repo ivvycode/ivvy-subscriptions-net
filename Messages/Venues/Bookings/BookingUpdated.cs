@@ -20,6 +20,6 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// Any previous information of the booking that was changed.
         /// </summary>
         [JsonProperty("previousData")]
-        public Dictionary<string, object> PreviousData { get; set; }
+        public dynamic PreviousData { get; set; }
     }
 }
