@@ -20,6 +20,11 @@ namespace Ivvy.Subscriptions
     /// </summary>
     public class Message
     {
+        public enum SourceTypes {
+            Unknown = 0,
+            ApiKey = 1,
+        }
+
         /// <summary>
         /// The unique transaction id of the message.
         /// </summary>
@@ -57,6 +62,19 @@ namespace Ivvy.Subscriptions
         public string Body { get; set; }
 
         /// <summary>
+        /// The source type of the message.
+        /// </summary>
+        [JsonProperty("SourceType")]
+        public SourceTypes SourceType { get; set; }
+
+        /// <summary>
+        /// The encoded information about the source, that depends on the source type.
+        /// Use GetSource() to get the source object.
+        /// </summary>
+        [JsonProperty("SourceInfo")]
+        public string SourceInfo { get; set; }
+
+        /// <summary>
         /// The message signature, which must be validated before handling the message.
         /// </summary>
         [JsonProperty("Signature")]
@@ -74,6 +92,25 @@ namespace Ivvy.Subscriptions
         public static Message ParseMessage(string messageText)
         {
             return JsonConvert.DeserializeObject<Message>(messageText);
+        }
+
+        /// <summary>
+        /// Returns the message's source object based on the current
+        /// SourceType and SourceInfo details.
+        /// </summary>
+        public object GetSource()
+        {
+            switch (SourceType) {
+                case SourceTypes.ApiKey:
+                    if (SourceInfo == null || SourceInfo == "") {
+                        return new Sources.UnknownSource();
+                    }
+                    return JsonConvert.DeserializeObject<Sources.ApiKeySource>(SourceInfo);
+
+                case SourceTypes.Unknown:
+                default:
+                    return new Sources.UnknownSource();
+            }
         }
 
         /// <summary>
