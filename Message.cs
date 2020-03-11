@@ -11,6 +11,7 @@ using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
 using Ivvy.Subscriptions.Messages.Venues.Bookings;
+using Ivvy.Subscriptions.Messages.Contacts;
 
 namespace Ivvy.Subscriptions
 {
@@ -121,7 +122,8 @@ namespace Ivvy.Subscriptions
             if (Subject == null || Subject == "" || Body == null || Body == "") {
                 return null;
             }
-            switch (Subject) {
+            switch (Subject) 
+            {
                 case "BookingAdded":
                     return TryDecodeBody<BookingAdded>(Body);
 
@@ -154,6 +156,24 @@ namespace Ivvy.Subscriptions
 
                 case "BookingRoomReservationDeleted":
                     return TryDecodeBody<RoomReservationDeleted>(Body);
+                
+                case "ContactAdded":
+                    return TryDecodeBody<ContactAdded>(Body);
+                
+                case "ContactDeleted":
+                    return TryDecodeBody<ContactDeleted>(Body);
+                
+                case "ContactUpdated":
+                    return TryDecodeBody<ContactUpdated>(Body);
+                
+                case "CompanyAdded":
+                    return TryDecodeBody<CompanyAdded>(Body);
+                
+                case "CompanyDeleted":
+                    return TryDecodeBody<CompanyDeleted>(Body);
+                
+                case "CompanyUpdated":
+                    return TryDecodeBody<CompanyUpdated>(Body);
 
                 default:
                     return null;
