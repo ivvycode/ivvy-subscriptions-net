@@ -3,12 +3,12 @@ using Newtonsoft.Json;
 namespace Ivvy.Subscriptions.Messages.Contacts
 {
     /// <summary>
-    /// A new Company / Account was added.
+    /// A company was added.
     /// </summary>
     public class CompanyAdded
     {
         /// <summary>
-        /// The details of the Company object.
+        /// The details of the company.
         /// </summary>
         [JsonProperty("data")]
         public Contact.Company Company { get; set; }
