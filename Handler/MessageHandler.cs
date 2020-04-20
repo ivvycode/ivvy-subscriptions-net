@@ -88,7 +88,7 @@ namespace Ivvy.Subscriptions.Handler
         {
             try {
                 await Utils.MakeGetRequest(awsMsg.SubscribeURL);
-                return new ConfirmedSubscriptionResult();
+                return new ConfirmedSubscriptionResult(awsMsg.TopicArn);
             }
             catch (Exception ex) {
                 return new ErrorResult(ex);

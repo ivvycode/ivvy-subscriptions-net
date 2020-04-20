@@ -5,5 +5,11 @@ namespace Ivvy.Subscriptions.Handler
     /// </summary>
     public class ConfirmedSubscriptionResult : IHandleResult
     {
+        public readonly string TopicArn = "";
+
+        public ConfirmedSubscriptionResult(string topicArn)
+        {
+            this.TopicArn = topicArn;
+        }
     }
 }
