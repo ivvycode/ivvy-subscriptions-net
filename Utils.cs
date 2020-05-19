@@ -27,6 +27,8 @@ namespace Ivvy.Subscriptions
                     var response = await reader.ReadToEndAsync();
                     reader.Close();
                     res.Close();
+                    reader.Dispose();
+                    res.Dispose();
                     return response.Trim();
                 }
                 catch (Exception ex) {

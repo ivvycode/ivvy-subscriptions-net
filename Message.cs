@@ -191,7 +191,7 @@ namespace Ivvy.Subscriptions
                     DateParseHandling = DateParseHandling.DateTime,
                 });
             }
-            catch (Exception ex) {
+            catch {
                 return null;
             }
         }
@@ -264,7 +264,7 @@ namespace Ivvy.Subscriptions
             try {
                 return await Utils.MakeGetRequest(publicKeyUrl);
             }
-            catch (Exception ex) {
+            catch {
                 return null;
             }
         }
