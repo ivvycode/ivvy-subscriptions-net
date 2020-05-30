@@ -1,3 +1,4 @@
+using Ivvy.API.Contact;
 using Newtonsoft.Json;
 
 namespace Ivvy.Subscriptions.Messages.Contacts
@@ -11,18 +12,12 @@ namespace Ivvy.Subscriptions.Messages.Contacts
         /// The details of the updated company.
         /// </summary>
         [JsonProperty("data")]
-        public Contact.Company Company
-        {
-            get; set;
-        }
+        public Company Company;
 
         /// <summary>
         /// Any previous information of the company that was changed.
         /// </summary>
         [JsonProperty("previousData")]
-        public dynamic PreviousData
-        {
-            get; set;
-        }
+        public dynamic PreviousData;
     }
 }

@@ -1,3 +1,4 @@
+using Ivvy.API.Contact;
 using Newtonsoft.Json;
 
 namespace Ivvy.Subscriptions.Messages.Contacts
@@ -11,9 +12,6 @@ namespace Ivvy.Subscriptions.Messages.Contacts
         /// The details of the company.
         /// </summary>
         [JsonProperty("data")]
-        public Contact.Company Company
-        {
-            get; set;
-        }
+        public Company Company;
     }
 }

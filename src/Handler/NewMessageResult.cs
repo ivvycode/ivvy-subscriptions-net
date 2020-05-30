@@ -8,7 +8,7 @@ namespace Ivvy.Subscriptions.Handler
         /// <summary>
         /// The actual message.
         /// </summary>
-        public Message Message = null;
+        public readonly Message Message;
 
         /// <summary>
         /// A new notification message has been received.

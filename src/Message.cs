@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
@@ -39,83 +38,56 @@ namespace Ivvy.Subscriptions
         /// The application region from which the message was sent.
         /// </summary>
         [JsonProperty("Region")]
-        public string Region
-        {
-            get; set;
-        }
+        public string Region;
 
         /// <summary>
         /// The UTC timestamp when the message was sent.
         /// </summary>
         [JsonProperty("Timestamp")]
-        public int Timestamp
-        {
-            get; set;
-        }
+        public int Timestamp;
 
         /// <summary>
         /// The unique id of the iVvy account within the application region.
         /// </summary>
         [JsonProperty("AccountId")]
-        public string AccountId
-        {
-            get; set;
-        }
+        public string AccountId;
 
         /// <summary>
         /// The notification message subject.
         /// </summary>
         [JsonProperty("Subject")]
-        public string Subject
-        {
-            get; set;
-        }
+        public string Subject;
 
         /// <summary>
         /// The json encoded string of data that depends on the message subject.
         /// </summary>
         [JsonProperty("Body")]
-        public string Body
-        {
-            get; set;
-        }
+        public string Body;
 
         /// <summary>
         /// The source type of the message.
         /// </summary>
         [JsonProperty("SourceType")]
-        public SourceTypes SourceType
-        {
-            get; set;
-        }
+        public SourceTypes SourceType;
 
         /// <summary>
         /// The encoded information about the source, that depends on the source type.
         /// Use GetSource() to get the source object.
         /// </summary>
         [JsonProperty("SourceInfo")]
-        public string SourceInfo
-        {
-            get; set;
-        }
+        public string SourceInfo;
 
         /// <summary>
         /// The message signature, which must be validated before handling the message.
         /// </summary>
         [JsonProperty("Signature")]
-        public string Signature
-        {
-            get; set;
-        }
+        public string Signature;
 
         /// <summary>
         /// The path to the public key that can be used to verify the signature.
         /// </summary>
         [JsonProperty("SigningPublicKeyPath")]
-        public string SigningPublicKeyPath
-        {
-            get; set;
-        }
+        public string SigningPublicKeyPath;
 
         /// <summary>
         /// Parses a json string, and returns a message object.
@@ -223,7 +195,7 @@ namespace Ivvy.Subscriptions
                 return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
                 {
                     DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                    DateFormatString = Ivvy.Utils.DateTimeFormat,
+                    DateFormatString = API.Utils.DateTimeFormat,
                     DateParseHandling = DateParseHandling.DateTime,
                 });
             }
@@ -272,7 +244,7 @@ namespace Ivvy.Subscriptions
             using (var sha1 = SHA1.Create())
             {
                 var hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(Body));
-                bodyHash = Ivvy.Utils.BytesToString(hashBytes);
+                bodyHash = API.Utils.BytesToString(hashBytes);
             }
             string[] parts = {
                 TxnId ?? "",

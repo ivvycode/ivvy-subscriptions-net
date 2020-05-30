@@ -10,7 +10,7 @@ namespace Ivvy.Subscriptions.Handler
         /// <summary>
         /// The actual error.
         /// </summary>
-        public Exception Error = null;
+        public readonly Exception Error;
 
         /// <summary>
         /// An error occurred whilst handling a notification message.

@@ -1,7 +1,6 @@
-using Ivvy.Venue;
-using Ivvy.Venue.Bookings;
+using Ivvy.API.Venue;
+using Ivvy.API.Venue.Bookings;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Ivvy.Subscriptions.Messages.Venues.Bookings
 {
@@ -14,18 +13,12 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The status of the booking when the accommodation group was added.
         /// </summary>
         [JsonProperty("bookingStatus")]
-        public Booking.StatusOptions BookingStatus
-        {
-            get; set;
-        }
+        public Booking.StatusOptions BookingStatus;
 
         /// <summary>
         /// The details of the accommodation group.
         /// </summary>
         [JsonProperty("data")]
-        public Accommodation Accommodation
-        {
-            get; set;
-        }
+        public Accommodation Accommodation;
     }
 }

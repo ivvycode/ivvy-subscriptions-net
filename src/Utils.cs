@@ -2,8 +2,6 @@ using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
-using System.Security.Cryptography;
-using Org.BouncyCastle.Crypto.Parameters;
 
 namespace Ivvy.Subscriptions
 {

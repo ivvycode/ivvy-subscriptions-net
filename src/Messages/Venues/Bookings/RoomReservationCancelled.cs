@@ -1,7 +1,6 @@
-using Ivvy.Venue;
-using Ivvy.Venue.Bookings;
+using Ivvy.API.Venue;
+using Ivvy.API.Venue.Bookings;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Ivvy.Subscriptions.Messages.Venues.Bookings
 {
@@ -14,18 +13,12 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The status of the booking when the room reservation was cancelled.
         /// </summary>
         [JsonProperty("bookingStatus")]
-        public Booking.StatusOptions BookingStatus
-        {
-            get; set;
-        }
+        public Booking.StatusOptions BookingStatus;
 
         /// <summary>
         /// The details of the room reservation.
         /// </summary>
         [JsonProperty("data")]
-        public RoomReservation RoomReservation
-        {
-            get; set;
-        }
+        public RoomReservation RoomReservation;
     }
 }

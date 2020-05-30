@@ -1,7 +1,5 @@
-using Ivvy.Venue;
-using Ivvy.Venue.Bookings;
+using Ivvy.API.Venue;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Ivvy.Subscriptions.Messages.Venues.Bookings
 {
@@ -14,18 +12,12 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The details of the updated booking.
         /// </summary>
         [JsonProperty("data")]
-        public Booking Booking
-        {
-            get; set;
-        }
+        public Booking Booking;
 
         /// <summary>
         /// Any previous information of the booking that was changed.
         /// </summary>
         [JsonProperty("previousData")]
-        public dynamic PreviousData
-        {
-            get; set;
-        }
+        public dynamic PreviousData;
     }
 }

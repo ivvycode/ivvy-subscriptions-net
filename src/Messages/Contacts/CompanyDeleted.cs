@@ -11,9 +11,6 @@ namespace Ivvy.Subscriptions.Messages.Contacts
         /// The unique id of the company that was deleted.
         /// </summary>
         [JsonProperty("companyId")]
-        public int CompanyId
-        {
-            get; set;
-        }
+        public int CompanyId;
     }
 }

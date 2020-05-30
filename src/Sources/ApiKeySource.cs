@@ -11,9 +11,6 @@ namespace Ivvy.Subscriptions.Sources
         /// The key that was used by the API request that sourced the message.
         /// </summary>
         [JsonProperty("key")]
-        public string Key
-        {
-            get; set;
-        }
+        public string Key;
     }
 }
