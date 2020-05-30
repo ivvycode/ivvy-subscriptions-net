@@ -14,12 +14,18 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The details of the updated booking.
         /// </summary>
         [JsonProperty("data")]
-        public Booking Booking { get; set; }
+        public Booking Booking
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Any previous information of the booking that was changed.
         /// </summary>
         [JsonProperty("previousData")]
-        public dynamic PreviousData { get; set; }
+        public dynamic PreviousData
+        {
+            get; set;
+        }
     }
 }

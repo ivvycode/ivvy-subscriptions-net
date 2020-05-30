@@ -21,7 +21,8 @@ namespace Ivvy.Subscriptions
     /// </summary>
     public class Message
     {
-        public enum SourceTypes {
+        public enum SourceTypes
+        {
             Unknown = 0,
             ApiKey = 1,
         }
@@ -30,62 +31,92 @@ namespace Ivvy.Subscriptions
         /// The unique transaction id of the message.
         /// </summary>
         [JsonProperty("TxnId")]
-        public string TxnId { get; set; }
+        public string TxnId
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The application region from which the message was sent.
         /// </summary>
         [JsonProperty("Region")]
-        public string Region { get; set; }
+        public string Region
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The UTC timestamp when the message was sent.
         /// </summary>
         [JsonProperty("Timestamp")]
-        public int Timestamp { get; set; }
+        public int Timestamp
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The unique id of the iVvy account within the application region.
         /// </summary>
         [JsonProperty("AccountId")]
-        public string AccountId { get; set; }
+        public string AccountId
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The notification message subject.
         /// </summary>
         [JsonProperty("Subject")]
-        public string Subject { get; set; }
+        public string Subject
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The json encoded string of data that depends on the message subject.
         /// </summary>
         [JsonProperty("Body")]
-        public string Body { get; set; }
+        public string Body
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The source type of the message.
         /// </summary>
         [JsonProperty("SourceType")]
-        public SourceTypes SourceType { get; set; }
+        public SourceTypes SourceType
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The encoded information about the source, that depends on the source type.
         /// Use GetSource() to get the source object.
         /// </summary>
         [JsonProperty("SourceInfo")]
-        public string SourceInfo { get; set; }
+        public string SourceInfo
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The message signature, which must be validated before handling the message.
         /// </summary>
         [JsonProperty("Signature")]
-        public string Signature { get; set; }
+        public string Signature
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The path to the public key that can be used to verify the signature.
         /// </summary>
         [JsonProperty("SigningPublicKeyPath")]
-        public string SigningPublicKeyPath { get; set; }
+        public string SigningPublicKeyPath
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Parses a json string, and returns a message object.
@@ -101,9 +132,11 @@ namespace Ivvy.Subscriptions
         /// </summary>
         public object GetSource()
         {
-            switch (SourceType) {
+            switch (SourceType)
+            {
                 case SourceTypes.ApiKey:
-                    if (SourceInfo == null || SourceInfo == "") {
+                    if (SourceInfo == null || SourceInfo == "")
+                    {
                         return new Sources.UnknownSource();
                     }
                     return JsonConvert.DeserializeObject<Sources.ApiKeySource>(SourceInfo);
@@ -119,10 +152,12 @@ namespace Ivvy.Subscriptions
         /// </summary>
         public object DecodeBody()
         {
-            if (Subject == null || Subject == "" || Body == null || Body == "") {
+            if (Subject == null || Subject == "" || Body == null || Body == "")
+            {
                 return null;
             }
-            switch (Subject) {
+            switch (Subject)
+            {
                 case "BookingAdded":
                     return TryDecodeBody<BookingAdded>(Body);
 
@@ -184,14 +219,17 @@ namespace Ivvy.Subscriptions
         /// </summary>
         private object TryDecodeBody<T>(string json) where T : new()
         {
-            try {
-                return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+                {
                     DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                     DateFormatString = Ivvy.Utils.DateTimeFormat,
                     DateParseHandling = DateParseHandling.DateTime,
                 });
             }
-            catch {
+            catch
+            {
                 return null;
             }
         }
@@ -207,10 +245,12 @@ namespace Ivvy.Subscriptions
         {
             string strToSign = GetStringToSign();
             string publicKey = await FetchPublicKey(publicKeyCache);
-            if (publicKey == null) {
+            if (publicKey == null)
+            {
                 return false;
             }
-            if (receivedPublicKey != null) {
+            if (receivedPublicKey != null)
+            {
                 await receivedPublicKey(SigningPublicKeyPath, publicKey);
             }
             var pemObject = new PemReader(new StringReader(publicKey)).ReadObject() as RsaKeyParameters;
@@ -230,7 +270,8 @@ namespace Ivvy.Subscriptions
         private string GetStringToSign()
         {
             string bodyHash = "";
-            using (var sha1 = SHA1.Create()) {
+            using (var sha1 = SHA1.Create())
+            {
                 byte[] hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(Body));
                 bodyHash = Ivvy.Utils.BytesToString(hashBytes);
             }
@@ -251,20 +292,25 @@ namespace Ivvy.Subscriptions
         /// </summary>
         private async Task<string> FetchPublicKey(Dictionary<string, string> publicKeyCache)
         {
-            if (SigningPublicKeyPath == null) {
+            if (SigningPublicKeyPath == null)
+            {
                 return null;
             }
-            if (publicKeyCache != null && publicKeyCache.ContainsKey(SigningPublicKeyPath)) {
+            if (publicKeyCache != null && publicKeyCache.ContainsKey(SigningPublicKeyPath))
+            {
                 return publicKeyCache[SigningPublicKeyPath];
             }
             string publicKeyUrl = GetPublicKeyUrl();
-            if (publicKeyUrl == null) {
+            if (publicKeyUrl == null)
+            {
                 return null;
             }
-            try {
+            try
+            {
                 return await Utils.MakeGetRequest(publicKeyUrl);
             }
-            catch {
+            catch
+            {
                 return null;
             }
         }
@@ -274,14 +320,17 @@ namespace Ivvy.Subscriptions
         /// </summary>
         private string GetPublicKeyUrl()
         {
-            if (SigningPublicKeyPath == null || Region == null) {
+            if (SigningPublicKeyPath == null || Region == null)
+            {
                 return null;
             }
             string basePath = "";
-            if (Region == "stage") {
+            if (Region == "stage")
+            {
                 basePath = "https://s3-ap-southeast-2.amazonaws.com/notifications.stageau.ap-southeast-2.ivvy.com";
             }
-            else {
+            else
+            {
                 basePath = $"https://s3-{Region}.amazonaws.com/accountnotifications.{Region}.ivvy.com";
             }
             return basePath + SigningPublicKeyPath;

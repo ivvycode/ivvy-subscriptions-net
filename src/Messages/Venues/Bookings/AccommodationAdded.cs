@@ -14,12 +14,18 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The status of the booking when the accommodation group was added.
         /// </summary>
         [JsonProperty("bookingStatus")]
-        public Booking.StatusOptions BookingStatus { get; set; }
+        public Booking.StatusOptions BookingStatus
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The details of the accommodation group.
         /// </summary>
         [JsonProperty("data")]
-        public Accommodation Accommodation { get; set; }
+        public Accommodation Accommodation
+        {
+            get; set;
+        }
     }
 }

@@ -14,6 +14,9 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The details of the booking.
         /// </summary>
         [JsonProperty("data")]
-        public Booking Booking { get; set; }
+        public Booking Booking
+        {
+            get; set;
+        }
     }
 }

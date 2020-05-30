@@ -19,8 +19,10 @@ namespace Ivvy.Subscriptions
         /// </summary>
         public static async Task<string> MakeGetRequest(string url, int numRetries = 4)
         {
-            for (int retries = 1; retries <= numRetries; retries++) {
-                try {
+            for (int retries = 1; retries <= numRetries; retries++)
+            {
+                try
+                {
                     HttpWebRequest req = HttpWebRequest.Create(url) as HttpWebRequest;
                     var res = await req.GetResponseAsync() as HttpWebResponse;
                     var reader = new StreamReader(res.GetResponseStream());
@@ -31,8 +33,10 @@ namespace Ivvy.Subscriptions
                     res.Dispose();
                     return response.Trim();
                 }
-                catch (Exception ex) {
-                    if (retries == numRetries) {
+                catch (Exception ex)
+                {
+                    if (retries == numRetries)
+                    {
                         throw ex;
                     }
                     await Task.Delay(1000);

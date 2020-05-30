@@ -11,6 +11,9 @@ namespace Ivvy.Subscriptions.Messages.Contacts
         /// The details of the contact.
         /// </summary>
         [JsonProperty("data")]
-        public Contact.Contact Contact { get; set; }
+        public Contact.Contact Contact
+        {
+            get; set;
+        }
     }
 }

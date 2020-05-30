@@ -52,27 +52,32 @@ namespace Ivvy.Subscriptions.Handler
         {
             // Validate the AWS message signature.
             string body = "";
-            using (StreamReader reader = new StreamReader(messageStream)) {
+            using (StreamReader reader = new StreamReader(messageStream))
+            {
                 body = await reader.ReadToEndAsync();
             }
             AWSMessage awsMsg = AWSMessage.ParseMessage(body);
-            if (awsMsg == null || !awsMsg.IsMessageSignatureValid()) {
+            if (awsMsg == null || !awsMsg.IsMessageSignatureValid())
+            {
                 return new InvalidSignatureResult();
             }
 
             // Validate the AWS topic.
             bool isValid = await IsTopicValid(awsMsg.TopicArn);
-            if (!isValid) {
+            if (!isValid)
+            {
                 return new InvalidTopicResult();
             }
 
             // If the AWS message is to confirm a subscription, then let's confirm it.
-            if (awsMsg.IsSubscriptionType) {
+            if (awsMsg.IsSubscriptionType)
+            {
                 return await ConfirmSubscription(awsMsg);
             }
 
             // If the AWS message is a notification, then extract the iVvy message.
-            if (awsMsg.IsNotificationType) {
+            if (awsMsg.IsNotificationType)
+            {
                 return await HandleNotification(awsMsg);
             }
 
@@ -86,11 +91,13 @@ namespace Ivvy.Subscriptions.Handler
         /// </summary>
         private async Task<IHandleResult> ConfirmSubscription(AWSMessage awsMsg)
         {
-            try {
+            try
+            {
                 await Utils.MakeGetRequest(awsMsg.SubscribeURL);
                 return new ConfirmedSubscriptionResult(awsMsg.TopicArn);
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 return new ErrorResult(ex);
             }
         }
@@ -104,13 +111,15 @@ namespace Ivvy.Subscriptions.Handler
         {
             // Validate the iVvy message data.
             Message ivMsg = Message.ParseMessage(awsMsg.MessageText);
-            if (ivMsg == null) {
+            if (ivMsg == null)
+            {
                 return new InvalidSignatureResult();
             }
             bool isSignatureValid = await ivMsg.IsSignatureValidAsync(
                 PublicKeyCache, ReceivedPublicKey
             );
-            if (!isSignatureValid) {
+            if (!isSignatureValid)
+            {
                 return new InvalidSignatureResult();
             }
 

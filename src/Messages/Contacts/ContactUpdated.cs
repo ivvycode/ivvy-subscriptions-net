@@ -11,12 +11,18 @@ namespace Ivvy.Subscriptions.Messages.Contacts
         /// The details of the updated contact.
         /// </summary>
         [JsonProperty("data")]
-        public Contact.Contact Contact { get; set; }
+        public Contact.Contact Contact
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Any previous information of the contact that was changed.
         /// </summary>
         [JsonProperty("previousData")]
-        public dynamic PreviousData { get; set; }
+        public dynamic PreviousData
+        {
+            get; set;
+        }
     }
 }

@@ -14,12 +14,18 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// The status of the booking when the room reservation was cancelled.
         /// </summary>
         [JsonProperty("bookingStatus")]
-        public Booking.StatusOptions BookingStatus { get; set; }
+        public Booking.StatusOptions BookingStatus
+        {
+            get; set;
+        }
 
         /// <summary>
         /// The details of the room reservation.
         /// </summary>
         [JsonProperty("data")]
-        public RoomReservation RoomReservation { get; set; }
+        public RoomReservation RoomReservation
+        {
+            get; set;
+        }
     }
 }
