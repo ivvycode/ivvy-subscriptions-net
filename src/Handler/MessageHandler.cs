@@ -15,17 +15,17 @@ namespace Ivvy.Subscriptions.Handler
         /// <summary>
         /// Callback used to validate the message topic.
         /// </summary>
-        private Func<string, Task<bool>> IsTopicValid;
+        private readonly Func<string, Task<bool>> isTopicValid;
 
         /// <summary>
         /// Keys matching the signature path will be used, avoiding a http request to fetch the public key.
         /// </summary>
-        private Dictionary<string, string> PublicKeyCache;
+        private readonly Dictionary<string, string> publicKeyCache;
 
         /// <summary>
         /// Callback that can be used to store the public key details for quicker access later.
         /// </summary>
-        private Func<string, string, Task> ReceivedPublicKey;
+        private readonly Func<string, string, Task> receivedPublicKey;
 
         /// <summary>
         /// This class can be used to handle subscription notification messages from iVvy.
@@ -38,9 +38,9 @@ namespace Ivvy.Subscriptions.Handler
             Dictionary<string, string> publicKeyCache,
             Func<string, string, Task> receivedPublicKey)
         {
-            IsTopicValid = isTopicValid;
-            PublicKeyCache = publicKeyCache;
-            ReceivedPublicKey = receivedPublicKey;
+            this.isTopicValid = isTopicValid;
+            this.publicKeyCache = publicKeyCache;
+            this.receivedPublicKey = receivedPublicKey;
         }
 
         /// <summary>
@@ -51,19 +51,19 @@ namespace Ivvy.Subscriptions.Handler
         public async Task<IHandleResult> HandleMessageAsync(Stream messageStream)
         {
             // Validate the AWS message signature.
-            string body = "";
-            using (StreamReader reader = new StreamReader(messageStream))
+            var body = "";
+            using (var reader = new StreamReader(messageStream))
             {
                 body = await reader.ReadToEndAsync();
             }
-            AWSMessage awsMsg = AWSMessage.ParseMessage(body);
+            var awsMsg = AWSMessage.ParseMessage(body);
             if (awsMsg == null || !awsMsg.IsMessageSignatureValid())
             {
                 return new InvalidSignatureResult();
             }
 
             // Validate the AWS topic.
-            bool isValid = await IsTopicValid(awsMsg.TopicArn);
+            var isValid = await isTopicValid(awsMsg.TopicArn);
             if (!isValid)
             {
                 return new InvalidTopicResult();
@@ -110,13 +110,13 @@ namespace Ivvy.Subscriptions.Handler
         private async Task<IHandleResult> HandleNotification(AWSMessage awsMsg)
         {
             // Validate the iVvy message data.
-            Message ivMsg = Message.ParseMessage(awsMsg.MessageText);
+            var ivMsg = Message.ParseMessage(awsMsg.MessageText);
             if (ivMsg == null)
             {
                 return new InvalidSignatureResult();
             }
-            bool isSignatureValid = await ivMsg.IsSignatureValidAsync(
-                PublicKeyCache, ReceivedPublicKey
+            var isSignatureValid = await ivMsg.IsSignatureValidAsync(
+                publicKeyCache, receivedPublicKey
             );
             if (!isSignatureValid)
             {

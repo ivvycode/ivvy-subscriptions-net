@@ -9,7 +9,7 @@ namespace Ivvy.Subscriptions.Handler
 
         public ConfirmedSubscriptionResult(string topicArn)
         {
-            this.TopicArn = topicArn;
+            TopicArn = topicArn;
         }
     }
 }

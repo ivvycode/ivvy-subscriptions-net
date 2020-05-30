@@ -4,7 +4,6 @@ using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -243,8 +242,8 @@ namespace Ivvy.Subscriptions
             Dictionary<string, string> publicKeyCache,
             Func<string, string, Task> receivedPublicKey)
         {
-            string strToSign = GetStringToSign();
-            string publicKey = await FetchPublicKey(publicKeyCache);
+            var strToSign = GetStringToSign();
+            var publicKey = await FetchPublicKey(publicKeyCache);
             if (publicKey == null)
             {
                 return false;
@@ -255,7 +254,7 @@ namespace Ivvy.Subscriptions
             }
             var pemObject = new PemReader(new StringReader(publicKey)).ReadObject() as RsaKeyParameters;
             var parameters = DotNetUtilities.ToRSAParameters(pemObject);
-            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider();
+            var rsa = new RSACryptoServiceProvider();
             rsa.ImportParameters(parameters);
             return rsa.VerifyData(
                 Encoding.UTF8.GetBytes(strToSign),
@@ -269,21 +268,21 @@ namespace Ivvy.Subscriptions
         /// </summary>
         private string GetStringToSign()
         {
-            string bodyHash = "";
+            var bodyHash = "";
             using (var sha1 = SHA1.Create())
             {
-                byte[] hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(Body));
+                var hashBytes = sha1.ComputeHash(Encoding.UTF8.GetBytes(Body));
                 bodyHash = Ivvy.Utils.BytesToString(hashBytes);
             }
             string[] parts = {
-                TxnId == null ? "" : TxnId,
-                Region == null ? "" : Region,
+                TxnId ?? "",
+                Region ?? "",
                 Timestamp.ToString(),
-                AccountId == null ? "" : AccountId,
-                Subject == null ? "" : Subject,
+                AccountId ?? "",
+                Subject ?? "",
                 bodyHash
             };
-            return String.Join(":", parts).ToLower();
+            return string.Join(":", parts).ToLower();
         }
 
         /// <summary>
@@ -300,7 +299,7 @@ namespace Ivvy.Subscriptions
             {
                 return publicKeyCache[SigningPublicKeyPath];
             }
-            string publicKeyUrl = GetPublicKeyUrl();
+            var publicKeyUrl = GetPublicKeyUrl();
             if (publicKeyUrl == null)
             {
                 return null;
@@ -324,7 +323,7 @@ namespace Ivvy.Subscriptions
             {
                 return null;
             }
-            string basePath = "";
+            string basePath;
             if (Region == "stage")
             {
                 basePath = "https://s3-ap-southeast-2.amazonaws.com/notifications.stageau.ap-southeast-2.ivvy.com";

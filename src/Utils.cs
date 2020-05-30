@@ -19,11 +19,11 @@ namespace Ivvy.Subscriptions
         /// </summary>
         public static async Task<string> MakeGetRequest(string url, int numRetries = 4)
         {
-            for (int retries = 1; retries <= numRetries; retries++)
+            for (var retries = 1; retries <= numRetries; retries++)
             {
                 try
                 {
-                    HttpWebRequest req = HttpWebRequest.Create(url) as HttpWebRequest;
+                    var req = HttpWebRequest.Create(url) as HttpWebRequest;
                     var res = await req.GetResponseAsync() as HttpWebResponse;
                     var reader = new StreamReader(res.GetResponseStream());
                     var response = await reader.ReadToEndAsync();
