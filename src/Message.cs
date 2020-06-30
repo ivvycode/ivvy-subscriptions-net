@@ -1,15 +1,15 @@
 using System;
-using System.IO;
-using System.Text;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.IO;
 using System.Security.Cryptography;
+using System.Text;
+using System.Threading.Tasks;
+using Ivvy.Subscriptions.Messages.Contacts;
+using Ivvy.Subscriptions.Messages.Venues.Bookings;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.OpenSsl;
 using Org.BouncyCastle.Security;
-using Ivvy.Subscriptions.Messages.Venues.Bookings;
-using Ivvy.Subscriptions.Messages.Contacts;
 
 namespace Ivvy.Subscriptions
 {
