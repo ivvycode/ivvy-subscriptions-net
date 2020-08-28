@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Ivvy.Subscriptions.Messages.Contacts;
+using Ivvy.Subscriptions.Messages.Payments;
 using Ivvy.Subscriptions.Messages.Venues.Bookings;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Crypto.Parameters;
@@ -179,6 +180,12 @@ namespace Ivvy.Subscriptions
 
                 case "CompanyDeleted":
                     return TryDecodeBody<CompanyDeleted>(Body);
+
+                case "InvoiceAdded":
+                    return TryDecodeBody<InvoiceAdded>(Body);
+
+                case "InvoiceUpdated":
+                    return TryDecodeBody<InvoiceUpdated>(Body);
 
                 default:
                     return null;
