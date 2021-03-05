@@ -9,13 +9,13 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
     public class BookingMoved
     {
         /// <summary>
-        /// The details of the updated booking.
+        /// The details of the moved booking.
         /// </summary>
         [JsonProperty("data")]
         public Booking Booking;
 
         /// <summary>
-        /// Any previous information of the booking that was changed.
+        /// Any previous information of the booking that was moved.
         /// </summary>
         [JsonProperty("previousData")]
         public dynamic PreviousData;
