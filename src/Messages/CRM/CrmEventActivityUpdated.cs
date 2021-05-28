@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 namespace Ivvy.Subscriptions.Messages.CRM
 {
     /// <summary>
-    /// An activity was updated.
+    /// An event activity was updated.
     /// </summary>
     public class CrmEventActivityUpdated
     {
