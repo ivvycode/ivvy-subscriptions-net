@@ -1,12 +1,11 @@
-﻿using Ivvy.API.Crm;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
-namespace Ivvy.Subscriptions.Messages.CRM
+namespace Ivvy.Subscriptions.Messages.Crm
 {
     /// <summary>
-    /// An event activity was deleted.
+    /// A crm activity was deleted
     /// </summary>
-    public class CrmEventActivityDeleted
+    public class EventActivityDeleted
     {
         /// <summary>
         /// The details of a deleted activity.
