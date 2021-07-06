@@ -200,6 +200,15 @@ namespace Ivvy.Subscriptions
                 case "CrmEventTaskDeleted":
                     return TryDecodeBody<EventTaskDeleted>(Body);
 
+                case "CrmEventActivityAdded":
+                    return TryDecodeBody<EventActivityAdded>(Body);
+
+                case "CrmEventActivityUpdated":
+                    return TryDecodeBody<EventActivityUpdated>(Body);
+
+                case "CrmEventActivityDeleted":
+                    return TryDecodeBody<EventActivityDeleted>(Body);
+
                 default:
                     return null;
             }
