@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Ivvy.Subscriptions.Messages.Contacts;
+using Ivvy.Subscriptions.Messages.Crm;
 using Ivvy.Subscriptions.Messages.Payments;
 using Ivvy.Subscriptions.Messages.Venues.Bookings;
 using Newtonsoft.Json;
@@ -189,6 +190,15 @@ namespace Ivvy.Subscriptions
 
                 case "InvoiceUpdated":
                     return TryDecodeBody<InvoiceUpdated>(Body);
+
+                case "CrmEventTaskAdded":
+                    return TryDecodeBody<EventTaskAdded>(Body);
+
+                case "CrmEventTaskUpdated":
+                    return TryDecodeBody<EventTaskUpdated>(Body);
+
+                case "CrmEventTaskDeleted":
+                    return TryDecodeBody<EventTaskDeleted>(Body);
 
                 default:
                     return null;

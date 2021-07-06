@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
 
-namespace Ivvy.Subscriptions.Messages.CRM
+namespace Ivvy.Subscriptions.Messages.Crm
 {
     /// <summary>
-    /// An eventtask was deleted.
+    /// A crm task was deleted
     /// </summary>
-    public class CrmEventTaskDeleted
+    public class EventTaskDeleted
     {
         /// <summary>
         /// The unique id of the eventtask that was deleted.
