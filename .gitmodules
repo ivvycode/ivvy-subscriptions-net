@@ -1,0 +1,3 @@
+[submodule "ivvy-sdk-net"]
+	path = ivvy-sdk-net
+	url = https://github.com/ivvycode/ivvy-sdk-net.git
