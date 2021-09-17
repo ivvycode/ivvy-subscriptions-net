@@ -229,6 +229,7 @@ namespace Ivvy.Subscriptions
                     DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                     DateFormatString = API.Utils.DateTimeFormat,
                     DateParseHandling = DateParseHandling.DateTime,
+                    NullValueHandling = NullValueHandling.Ignore,
                 });
             }
             catch
