@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Threading.Tasks;
+using AWSMessage = Amazon.SimpleNotificationService.Util.Message;
 
 namespace Ivvy.Subscriptions.Handler
 {
@@ -11,10 +13,9 @@ namespace Ivvy.Subscriptions.Handler
     public class MessageHandler
     {
         /// <summary>
-        /// Implementation of the message decoder. The default implementation uses AWS, but
-        /// an alternative may be provided at construction time.
+        /// Callback used to validate the message topic.
         /// </summary>
-        private readonly IMessageDecoder messageDecoder;
+        private readonly Func<string, Task<bool>> isTopicValid;
 
         /// <summary>
         /// Keys matching the signature path will be used, avoiding a http request to fetch the public key.
@@ -28,8 +29,6 @@ namespace Ivvy.Subscriptions.Handler
 
         /// <summary>
         /// This class can be used to handle subscription notification messages from iVvy.
-        /// If the messages are delivered as AWS subscription messages (the default case) this
-        /// interface validates the AWS topic.
         /// <param name="isTopicValid">Callback used to validate the message topic.</param>
         /// <param name="publicKeyCache">Keys matching the signature path will be used, avoiding a http request to fetch the public key.</param>
         /// <param name="receivedPublicKey">Callback that can be used to store the public key details for quicker access later.</param>
@@ -37,25 +36,9 @@ namespace Ivvy.Subscriptions.Handler
         public MessageHandler(
             Func<string, Task<bool>> isTopicValid,
             Dictionary<string, string> publicKeyCache,
-            Func<string, string, Task> receivedPublicKey,
-            IMessageDecoder messageDecoder = null)
-            : this(messageDecoder
-                        ?? new AWSMessageDecoder(isTopicValid),
-                   publicKeyCache,
-                   receivedPublicKey)
-        {
-        }
-
-        /// <summary>
-        /// This constructor can be used to override the default decoding of the provided message
-        /// stream, if it has been delivered by a means other than AWS.
-        /// <param name="messageDecoder">Alternative message decoder implementation.</param>
-        /// </summary>
-        public MessageHandler(IMessageDecoder messageDecoder,
-            Dictionary<string, string> publicKeyCache,
             Func<string, string, Task> receivedPublicKey)
         {
-            this.messageDecoder = messageDecoder;
+            this.isTopicValid = isTopicValid;
             this.publicKeyCache = publicKeyCache;
             this.receivedPublicKey = receivedPublicKey;
         }
@@ -67,17 +50,74 @@ namespace Ivvy.Subscriptions.Handler
         /// </summary>
         public async Task<IHandleResult> HandleMessageAsync(Stream messageStream)
         {
-            var (handleResult, ivMsg) = await messageDecoder?.DecodeMessageAsync(messageStream);
-
-            if (ivMsg == null)
+            // Validate the AWS message signature.
+            var body = "";
+            using (var reader = new StreamReader(messageStream))
             {
-                return handleResult ?? new InvalidSignatureResult();
+                body = await reader.ReadToEndAsync();
+            }
+            var awsMsg = AWSMessage.ParseMessage(body);
+            if (awsMsg == null || !awsMsg.IsMessageSignatureValid())
+            {
+                return new InvalidSignatureResult();
             }
 
+            // Validate the AWS topic.
+            var isValid = await isTopicValid(awsMsg.TopicArn);
+            if (!isValid)
+            {
+                return new InvalidTopicResult();
+            }
+
+            // If the AWS message is to confirm a subscription, then let's confirm it.
+            if (awsMsg.IsSubscriptionType)
+            {
+                return await ConfirmSubscription(awsMsg);
+            }
+
+            // If the AWS message is a notification, then extract the iVvy message.
+            if (awsMsg.IsNotificationType)
+            {
+                return await HandleNotification(awsMsg);
+            }
+
+            return new UnhandledMessageResult();
+        }
+
+        /// <summary>
+        /// Confirms a subscription to a notification topic.
+        /// <param name="awsMsg">The AWS subscription type message.</param>
+        /// <returns>A confirmed result on success, or an error result.</returns>
+        /// </summary>
+        private async Task<IHandleResult> ConfirmSubscription(AWSMessage awsMsg)
+        {
+            try
+            {
+                await Utils.MakeGetRequest(awsMsg.SubscribeURL);
+                return new ConfirmedSubscriptionResult(awsMsg.TopicArn);
+            }
+            catch (Exception ex)
+            {
+                return new ErrorResult(ex);
+            }
+        }
+
+        /// <summary>
+        /// Handles a notification message.
+        /// <param name="awsMsg">The AWS notification message, which should contain a message from iVvy.</param>
+        /// <returns>A new message result, or an invalid signature result.</returns>
+        /// </summary>
+        private async Task<IHandleResult> HandleNotification(AWSMessage awsMsg)
+        {
+            // Validate the iVvy message data.
+            var ivMsg = Message.ParseMessage(awsMsg.MessageText);
+            if (ivMsg == null)
+            {
+                return new InvalidSignatureResult();
+            }
             var isSignatureValid = await ivMsg.IsSignatureValidAsync(
                 publicKeyCache, receivedPublicKey
             );
-
             if (!isSignatureValid)
             {
                 return new InvalidSignatureResult();
