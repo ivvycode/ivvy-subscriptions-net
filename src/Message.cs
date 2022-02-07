@@ -227,27 +227,6 @@ namespace Ivvy.Subscriptions
         }
 
         /// <summary>
-        /// Does the actual work of deserializing the message body.
-        /// </summary>
-        private object TryDecodeBody<T>(string json) where T : new()
-        {
-            try
-            {
-                return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
-                {
-                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                    DateFormatString = API.Utils.DateTimeFormat,
-                    DateParseHandling = DateParseHandling.DateTime,
-                    NullValueHandling = NullValueHandling.Ignore,
-                });
-            }
-            catch
-            {
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Validates this message's signature.
         /// <param name="publicKeyCache">Keys matching the signature path will be used, avoiding a http request to fetch the public key.</param>
         /// <param name="receivedPublicKey">Called with the public key details, to allow calling code to store for later.</param>
@@ -275,6 +254,29 @@ namespace Ivvy.Subscriptions
                 CryptoConfig.MapNameToOID("SHA1"),
                 Convert.FromBase64String(Signature)
             );
+        }
+
+        private const string SIGNING_BASE_PATH_KEY = "SIGNING_BASE_PATH";
+
+        /// <summary>
+        /// Does the actual work of deserializing the message body.
+        /// </summary>
+        private object TryDecodeBody<T>(string json) where T : new()
+        {
+            try
+            {
+                return JsonConvert.DeserializeObject<T>(json, new JsonSerializerSettings
+                {
+                    DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                    DateFormatString = API.Utils.DateTimeFormat,
+                    DateParseHandling = DateParseHandling.DateTime,
+                    NullValueHandling = NullValueHandling.Ignore,
+                });
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         /// <summary>
@@ -337,14 +339,15 @@ namespace Ivvy.Subscriptions
             {
                 return null;
             }
-            string basePath;
-            if (Region == "stage")
+            var basePath = (Region == "stage")
+                ? "https://s3-ap-southeast-2.amazonaws.com/notifications.stageau.ap-southeast-2.ivvy.com"
+                : $"https://s3-{Region}.amazonaws.com/accountnotifications.{Region}.ivvy.com";
+
+            var overrideBasePath = Environment.GetEnvironmentVariable(SIGNING_BASE_PATH_KEY);
+
+            if(overrideBasePath != null)
             {
-                basePath = "https://s3-ap-southeast-2.amazonaws.com/notifications.stageau.ap-southeast-2.ivvy.com";
-            }
-            else
-            {
-                basePath = $"https://s3-{Region}.amazonaws.com/accountnotifications.{Region}.ivvy.com";
+                basePath = overrideBasePath;
             }
             return basePath + SigningPublicKeyPath;
         }

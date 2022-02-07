@@ -6,7 +6,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Ivvy.Subscriptions makes it easy to consume subscription notification messages from the iVvy platform.</Description>
     <AssemblyTitle>Ivvy.Subscriptions</AssemblyTitle>
-    <VersionPrefix>0.83.1</VersionPrefix>
+    <VersionPrefix>0.83.2</VersionPrefix>
     <AssemblyName>Ivvy.Subscriptions</AssemblyName>
     <PackageId>Ivvy.Subscriptions</PackageId>
     <PackageTags>Ivvy;API;Subscriptions;Notifications</PackageTags>
@@ -15,7 +15,7 @@
     <Copyright>Copyright (c) Ivvy Pty Ltd</Copyright>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Version>0.83.1</Version>
+    <Version>0.83.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

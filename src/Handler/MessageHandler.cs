@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 using AWSMessage = Amazon.SimpleNotificationService.Util.Message;
 
@@ -28,6 +27,11 @@ namespace Ivvy.Subscriptions.Handler
         private readonly Func<string, string, Task> receivedPublicKey;
 
         /// <summary>
+        /// Flag allowing less stringent message handling
+        /// </summary>
+        private readonly bool isLocalMode;
+
+        /// <summary>
         /// This class can be used to handle subscription notification messages from iVvy.
         /// <param name="isTopicValid">Callback used to validate the message topic.</param>
         /// <param name="publicKeyCache">Keys matching the signature path will be used, avoiding a http request to fetch the public key.</param>
@@ -36,11 +40,13 @@ namespace Ivvy.Subscriptions.Handler
         public MessageHandler(
             Func<string, Task<bool>> isTopicValid,
             Dictionary<string, string> publicKeyCache,
-            Func<string, string, Task> receivedPublicKey)
+            Func<string, string, Task> receivedPublicKey,
+            bool isLocalMode = false)
         {
             this.isTopicValid = isTopicValid;
             this.publicKeyCache = publicKeyCache;
             this.receivedPublicKey = receivedPublicKey;
+            this.isLocalMode = isLocalMode;
         }
 
         /// <summary>
@@ -57,7 +63,7 @@ namespace Ivvy.Subscriptions.Handler
                 body = await reader.ReadToEndAsync();
             }
             var awsMsg = AWSMessage.ParseMessage(body);
-            if (awsMsg == null || !awsMsg.IsMessageSignatureValid())
+            if (awsMsg == null || !IsSignatureValid(awsMsg))
             {
                 return new InvalidSignatureResult();
             }
@@ -124,6 +130,11 @@ namespace Ivvy.Subscriptions.Handler
             }
 
             return new NewMessageResult(ivMsg);
+        }
+
+        private bool IsSignatureValid(AWSMessage message)
+        {
+            return isLocalMode || message.IsMessageSignatureValid();
         }
     }
 }
