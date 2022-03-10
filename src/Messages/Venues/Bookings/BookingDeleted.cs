@@ -37,5 +37,11 @@ namespace Ivvy.Subscriptions.Messages.Venues.Bookings
         /// </summary>
         [JsonProperty("roomReservationIds")]
         public int[] RoomReservationIds;
+
+        /// <summary>
+        /// The unique ids of the sessions that belonged to the deleted booking.
+        /// </summary>
+        [JsonProperty("sessionIds")]
+        public int[] SessionIds;
     }
 }
