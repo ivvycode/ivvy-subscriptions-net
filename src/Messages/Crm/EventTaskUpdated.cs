@@ -1,4 +1,4 @@
-﻿using Ivvy.API.Crm;
+using Ivvy.API.Crm;
 using Newtonsoft.Json;
 
 namespace Ivvy.Subscriptions.Messages.Crm

@@ -354,7 +354,7 @@ namespace Ivvy.Subscriptions
 
             var overrideBasePath = Environment.GetEnvironmentVariable(SIGNING_BASE_PATH_KEY);
 
-            if(!string.IsNullOrWhiteSpace(overrideBasePath))
+            if (!string.IsNullOrWhiteSpace(overrideBasePath))
             {
                 basePath = overrideBasePath;
             }

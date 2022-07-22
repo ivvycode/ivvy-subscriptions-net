@@ -1,4 +1,4 @@
-﻿using Ivvy.API.Invoice;
+using Ivvy.API.Invoice;
 using Newtonsoft.Json;
 
 namespace Ivvy.Subscriptions.Messages.Payments
