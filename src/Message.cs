@@ -230,6 +230,9 @@ namespace Ivvy.Subscriptions
                 case "OpportunityDeleted":
                     return TryDecodeBody<OpportunityDeleted>(Body);
 
+                case "VenueGuestAnonymised":
+                    return TryDecodeBody<VenueGuestAnonymised>(Body);
+
                 default:
                     return null;
             }
