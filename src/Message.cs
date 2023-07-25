@@ -233,6 +233,15 @@ namespace Ivvy.Subscriptions
                 case "VenueGuestAnonymised":
                     return TryDecodeBody<VenueGuestAnonymised>(Body);
 
+                case "SpaceBlockoutAdded":
+                    return TryDecodeBody<SpaceBlockoutAdded>(Body);
+
+                case "SpaceBlockoutDeleted":
+                    return TryDecodeBody<SpaceBlockoutDeleted>(Body);
+
+                case "SpaceBlockoutUpdated":
+                    return TryDecodeBody<SpaceBlockoutUpdated>(Body);
+
                 default:
                     return null;
             }
