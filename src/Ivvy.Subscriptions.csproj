@@ -6,8 +6,8 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <Description>Ivvy.Subscriptions makes it easy to consume subscription notification messages from the iVvy platform.</Description>
     <AssemblyTitle>Ivvy.Subscriptions</AssemblyTitle>
-    <VersionPrefix>0.87.0</VersionPrefix>
-    <Version>0.87.0</Version>
+    <VersionPrefix>0.88.0</VersionPrefix>
+    <Version>0.88.0</Version>
     <AssemblyName>Ivvy.Subscriptions</AssemblyName>
     <PackageId>Ivvy.Subscriptions</PackageId>
     <PackageTags>Ivvy;API;Subscriptions;Notifications</PackageTags>
@@ -20,8 +20,8 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.SimpleNotificationService" Version="3.3.1.11" />
-    <PackageReference Include="Ivvy.API" Version="0.87.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Ivvy.API" Version="0.88.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="4.1.0" />
     <PackageReference Include="Portable.BouncyCastle" Version="1.8.3" />
   </ItemGroup>
